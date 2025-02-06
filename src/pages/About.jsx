@@ -2,20 +2,24 @@ import React from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { ActionBtn } from '../styled/StActionBtn';
+import { useDispatch, useSelector } from 'react-redux';
+import { deleteTodo } from '../redux/slices/todoSlice';
 
-const About = ({ todo, setTodo}) => {
+const About = () => {
+    const todo = useSelector((state) => state.todo);
     const [searchParam] = useSearchParams();
     const detailId = Number(searchParam.get('id'));
     const DetailTodo = todo.find((todo) => todo.id === detailId);
 
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const handleUpdateBtn = (id) => {
         navigate(`/?id=${id}`);
     };
 
     const handleDeleteBtn = (id) => {
-        setTodo([...todo].filter((todo) => todo.id !== id));
+        dispatch(deleteTodo({ id: id }));
         navigate(-1);
     };
     return (
@@ -101,4 +105,3 @@ const TodoBtnWrapper = styled.div`
     display: flex;
     gap: 10px;
 `;
-

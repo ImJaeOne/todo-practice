@@ -1,9 +1,13 @@
 import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import { toggleTodo } from '../redux/slices/todoSlice';
 
-const MyPage = ({ todo, setTodo }) => {
+const MyPage = () => {
+    const todo = useSelector((state) => state.todo);
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const doneTodo = todo.filter((todo) => todo.isDone === true);
     const notDoneTodo = todo.filter((todo) => todo.isDone === false);
@@ -16,11 +20,7 @@ const MyPage = ({ todo, setTodo }) => {
     };
 
     const handleCheckBox = (id) => {
-        setTodo(
-            [...todo].map((todo) =>
-                todo.id === id ? { ...todo, isDone: !todo.isDone, end_date: todo.isDone ? '' : new Date() } : todo
-            )
-        );
+        dispatch(toggleTodo({id: id}));
     };
 
     return (

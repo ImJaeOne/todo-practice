@@ -3,6 +3,8 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { ActionBtn } from '../styled/StActionBtn';
 import isEqual from 'lodash.isequal';
+import { useDispatch, useSelector } from 'react-redux';
+import { addTodo, updateTodo } from '../redux/slices/todoSlice';
 
 const resetForm = {
     title: '',
@@ -10,13 +12,16 @@ const resetForm = {
     isDone: false,
 };
 
-export const TodoForm = ({ todo, setTodo }) => {
+export const TodoForm = () => {
     const [newTodo, setNewTodo] = useState(resetForm);
     const [searchTodo, setSearchTodo] = useState(null);
 
     const [searchParams] = useSearchParams();
     const searchParamsId = Number(searchParams.get('id'));
 
+    const todo = useSelector((state) => state.todo);
+
+    const dispatch = useDispatch();
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -38,31 +43,16 @@ export const TodoForm = ({ todo, setTodo }) => {
         if (searchParamsId) {
             // 둘 다 객체이기 때문에 JSON.stringify() 이용 하지만 순서 다를 경우 문제 생길수도..
             // lodash.isequal을 사용하자...!
-            console.log(newTodo);
-            console.log(searchTodo);
             if (isEqual(newTodo, searchTodo)) {
-                console.log('같음')
+                console.log('같음');
                 navigate(-1);
                 return;
             }
-            setTodo((prev) =>
-                prev.map((todo) => {
-                    return todo.id === searchParamsId
-                        ? { ...newTodo, start_date: new Date(), end_date: '', isDone: false }
-                        : todo;
-                })
-            );
+            dispatch(updateTodo({ searchParamsId: searchParamsId, newTodo: newTodo }));
             setNewTodo(resetForm);
             navigate(-1);
         } else {
-            setTodo((prev) => [
-                ...prev,
-                {
-                    ...newTodo,
-                    id: new Date().getTime(),
-                    start_date: new Date(),
-                },
-            ]);
+            dispatch(addTodo({ newTodo: newTodo }));
             setNewTodo(resetForm);
             navigate('/mypage');
         }
