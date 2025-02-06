@@ -32,7 +32,7 @@ const Nav = () => {
 
     return (
         <HeaderContainer>
-            <Logo>Todo</Logo>
+            <Logo onClick={() => navigate('/')}>Todo</Logo>
             <NavBtn onClick={handleNav}>{btnText()}</NavBtn>
         </HeaderContainer>
     );
@@ -56,6 +56,7 @@ const Logo = styled.div`
     font-size: 24px;
     font-weight: bold;
     letter-spacing: 1px;
+    cursor: pointer;
 `;
 
 const NavBtn = styled.button`
