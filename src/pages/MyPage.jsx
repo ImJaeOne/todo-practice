@@ -1,8 +1,11 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import { useTodoContext } from '../context/todoContext';
 
-const MyPage = ({ todo, setTodo }) => {
+const MyPage = () => {
+    const {todo, handleCheckBox} = useTodoContext();
+
     const navigate = useNavigate();
 
     const doneTodo = todo.filter((todo) => todo.isDone === true);
@@ -15,13 +18,6 @@ const MyPage = ({ todo, setTodo }) => {
         navigate(`/about?id=${id}`);
     };
 
-    const handleCheckBox = (id) => {
-        setTodo(
-            [...todo].map((todo) =>
-                todo.id === id ? { ...todo, isDone: !todo.isDone, end_date: todo.isDone ? '' : new Date() } : todo
-            )
-        );
-    };
 
     return (
         <MyTodoWrapper>

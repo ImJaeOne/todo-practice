@@ -4,24 +4,19 @@ import Home from '../pages/Home';
 import MyPage from '../pages/MyPage';
 import Layout from '../layout/Layout';
 import About from '../pages/About';
+import { TodoProvider } from '../context/todoContext';
 
 const Router = () => {
-    const [todo, setTodo] = useState(JSON.parse(localStorage.getItem('todo')) || []);
-
-    useEffect(() => {
-        localStorage.setItem('todo', JSON.stringify(todo));
-    }, [todo]);
-
-    
-
     return (
         <BrowserRouter>
             <Layout>
-                <Routes>
-                    <Route path="/" element={<Home todo={todo} setTodo={setTodo} />} />
-                    <Route path="/mypage" element={<MyPage todo={todo} setTodo={setTodo} />} />
-                    <Route path="/about" element={<About todo={todo} setTodo={setTodo} />} />
-                </Routes>
+                <TodoProvider>
+                    <Routes>
+                        <Route path="/" element={<Home />} />
+                        <Route path="/mypage" element={<MyPage />} />
+                        <Route path="/about" element={<About />} />
+                    </Routes>
+                </TodoProvider>
             </Layout>
         </BrowserRouter>
     );

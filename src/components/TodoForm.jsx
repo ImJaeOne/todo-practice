@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { ActionBtn } from '../styled/StActionBtn';
-import isEqual from 'lodash.isequal';
+import { useTodoContext } from '../context/todoContext';
 
 const resetForm = {
     title: '',
@@ -10,14 +10,13 @@ const resetForm = {
     isDone: false,
 };
 
-export const TodoForm = ({ todo, setTodo }) => {
+export const TodoForm = () => {
+    const { todo, handleSubmitBtn } = useTodoContext();
     const [newTodo, setNewTodo] = useState(resetForm);
     const [searchTodo, setSearchTodo] = useState(null);
 
     const [searchParams] = useSearchParams();
     const searchParamsId = Number(searchParams.get('id'));
-
-    const navigate = useNavigate();
 
     useEffect(() => {
         if (searchParamsId) {
@@ -32,44 +31,8 @@ export const TodoForm = ({ todo, setTodo }) => {
         setNewTodo((prev) => ({ ...prev, [id]: value }));
     };
 
-    const handleSubmitBtn = (e) => {
-        e.preventDefault();
-
-        if (searchParamsId) {
-            // 둘 다 객체이기 때문에 JSON.stringify() 이용 하지만 순서 다를 경우 문제 생길수도..
-            // lodash.isequal을 사용하자...!
-            console.log(newTodo);
-            console.log(searchTodo);
-            if (isEqual(newTodo, searchTodo)) {
-                console.log('같음')
-                navigate(-1);
-                return;
-            }
-            setTodo((prev) =>
-                prev.map((todo) => {
-                    return todo.id === searchParamsId
-                        ? { ...newTodo, start_date: new Date(), end_date: '', isDone: false }
-                        : todo;
-                })
-            );
-            setNewTodo(resetForm);
-            navigate(-1);
-        } else {
-            setTodo((prev) => [
-                ...prev,
-                {
-                    ...newTodo,
-                    id: new Date().getTime(),
-                    start_date: new Date(),
-                },
-            ]);
-            setNewTodo(resetForm);
-            navigate('/mypage');
-        }
-    };
-
     return (
-        <TodoFormWrapper onSubmit={handleSubmitBtn}>
+        <TodoFormWrapper onSubmit={(e) => handleSubmitBtn(e, searchParamsId, searchTodo, newTodo, setNewTodo)}>
             <TodoLabel>
                 <TodoSpan>Title</TodoSpan>
                 <TodoInput id="title" value={newTodo.title} onChange={handleChangeInput} />

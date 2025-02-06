@@ -2,8 +2,10 @@ import React from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { ActionBtn } from '../styled/StActionBtn';
+import { useTodoContext } from '../context/todoContext';
 
-const About = ({ todo, setTodo}) => {
+const About = () => {
+    const {todo, handleDeleteBtn} = useTodoContext();
     const [searchParam] = useSearchParams();
     const detailId = Number(searchParam.get('id'));
     const DetailTodo = todo.find((todo) => todo.id === detailId);
@@ -14,10 +16,7 @@ const About = ({ todo, setTodo}) => {
         navigate(`/?id=${id}`);
     };
 
-    const handleDeleteBtn = (id) => {
-        setTodo([...todo].filter((todo) => todo.id !== id));
-        navigate(-1);
-    };
+    
     return (
         <AboutWrapper>
             <TodoDetail>
