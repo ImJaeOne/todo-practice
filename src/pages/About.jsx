@@ -22,6 +22,7 @@ const About = () => {
         dispatch(deleteTodo({ id: id }));
         navigate(-1);
     };
+    
     return (
         <AboutWrapper>
             <TodoDetail>
@@ -63,7 +64,7 @@ const AboutWrapper = styled.div`
     padding: 2rem;
     border-radius: 8px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    background-color: #fff;
+    background-color: ${(props) => props.theme.cardBackground};
     display: flex;
     justify-content: space-between;
 `;
@@ -73,13 +74,13 @@ const TodoDetail = styled.div``;
 const TodoTitle = styled.h1`
     font-size: 2rem;
     font-weight: bold;
-    color: #333;
+    color: ${(props) => props.theme.color};
     margin-bottom: 1rem;
 `;
 
 const TodoContent = styled.p`
     font-size: 1.2rem;
-    color: #555;
+    color: ${(props) => props.theme.color};
     margin-bottom: 1.5rem;
 `;
 
@@ -92,13 +93,13 @@ const DateInfo = styled.div`
 const Label = styled.span`
     font-size: 1rem;
     font-weight: bold;
-    color: #555;
+    color: ${(props) => props.theme.color};
     margin-right: 1rem;
 `;
 
 const DateSpan = styled.span`
     font-size: 1rem;
-    color: #333;
+    color: ${(props) => props.theme.color};
 `;
 
 const TodoBtnWrapper = styled.div`

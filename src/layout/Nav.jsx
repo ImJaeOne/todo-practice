@@ -1,39 +1,33 @@
 import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { Switch } from 'antd';
 import styled from 'styled-components';
+import { useTheme } from '../contexts/themeContext';
 
 const Nav = () => {
     const navigate = useNavigate();
     const location = useLocation();
+    const { isDarkMode, toggleTheme } = useTheme();
 
     const btnText = () => {
-        if (location.pathname === '/') {
-            return 'MyTodo';
-        }
-        if (location.pathname === '/mypage') {
-            return 'Home';
-        }
-        if (location.pathname === '/about') {
-            return 'Back';
-        }
+        if (location.pathname === '/') return 'MyTodo';
+        if (location.pathname === '/mypage') return 'Home';
+        if (location.pathname === '/about') return 'Back';
     };
 
     const handleNav = () => {
-        if (location.pathname === '/') {
-            navigate('/mypage');
-        }
-        if (location.pathname === '/mypage') {
-            navigate('/');
-        }
-        if (location.pathname === '/about') {
-            navigate(-1);
-        }
+        if (location.pathname === '/') navigate('/mypage');
+        if (location.pathname === '/mypage') navigate('/');
+        if (location.pathname === '/about') navigate(-1);
     };
 
     return (
         <HeaderContainer>
             <Logo onClick={() => navigate('/')}>Todo</Logo>
-            <NavBtn onClick={handleNav}>{btnText()}</NavBtn>
+            <HeaderRightContainer>
+                <NavBtn onClick={handleNav}>{btnText()}</NavBtn>
+                <Switch checked={!isDarkMode} onChange={toggleTheme} />
+            </HeaderRightContainer>
         </HeaderContainer>
     );
 };
@@ -43,8 +37,8 @@ const HeaderContainer = styled.nav`
     top: 0;
     width: 100%;
     height: 80px;
-    background-color: #333;
-    color: #fff;
+    background-color: ${({ theme }) => theme.navBackground};
+    color: ${({ theme }) => theme.color};
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -59,10 +53,15 @@ const Logo = styled.div`
     cursor: pointer;
 `;
 
+const HeaderRightContainer = styled.div`
+    display: flex;
+    padding: 10px;
+`;
+
 const NavBtn = styled.button`
     background-color: transparent;
     border: none;
-    color: white;
+    color: ${({ theme }) => theme.color};
     padding: 0 20px;
     margin-right: 20px;
     font-size: 16px;

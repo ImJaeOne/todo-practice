@@ -8,6 +8,7 @@ const MyPage = () => {
     const todo = useSelector((state) => state.todo);
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const theme = useSelector((state) => state.theme); // theme을 store에서 가져오기
 
     const doneTodo = todo.filter((todo) => todo.isDone === true);
     const notDoneTodo = todo.filter((todo) => todo.isDone === false);
@@ -24,31 +25,33 @@ const MyPage = () => {
     };
 
     return (
-        <MyTodoWrapper>
-            <Title>MyTodo</Title>
-            <TodoContainer>
+        <MyTodoWrapper theme={theme}>
+            <Title theme={theme}>MyTodo</Title>
+            <TodoContainer theme={theme}>
                 <TodoColumn>
-                    <ColumnTitle>Working🔥</ColumnTitle>
+                    <ColumnTitle theme={theme}>Working🔥</ColumnTitle>
                     {notDoneTodo.map((todo) => (
-                        <TodoItem key={todo.id} onClick={(e) => handleDetail(e, todo.id)}>
+                        <TodoItem key={todo.id} onClick={(e) => handleDetail(e, todo.id)} theme={theme}>
                             <span>{todo.title}</span>
                             <Checkbox
                                 type="checkbox"
                                 checked={todo.isDone === true}
                                 onChange={() => handleCheckBox(todo.id)}
+                                theme={theme}
                             />
                         </TodoItem>
                     ))}
                 </TodoColumn>
                 <TodoColumn>
-                    <ColumnTitle>Done🎉</ColumnTitle>
+                    <ColumnTitle theme={theme}>Done🎉</ColumnTitle>
                     {doneTodo.map((todo) => (
-                        <TodoItem key={todo.id} onClick={(e) => handleDetail(e, todo.id)}>
+                        <TodoItem key={todo.id} onClick={(e) => handleDetail(e, todo.id)} theme={theme}>
                             <span>{todo.title}</span>
                             <Checkbox
                                 type="checkbox"
                                 checked={todo.isDone === true}
                                 onChange={() => handleCheckBox(todo.id)}
+                                theme={theme}
                             />
                         </TodoItem>
                     ))}
@@ -67,12 +70,13 @@ const MyTodoWrapper = styled.div`
     align-items: center;
     gap: 1rem;
     padding: 2rem 0;
+    background-color: ${(props) => props.theme.background};
 `;
 
 const Title = styled.h1`
     font-size: 2rem;
     font-weight: bold;
-    color: #333;
+    color: ${(props) => props.theme.color};
 `;
 
 const TodoContainer = styled.div`
@@ -93,7 +97,7 @@ const TodoColumn = styled.div`
 const ColumnTitle = styled.h2`
     font-size: 1.5rem;
     text-align: center;
-    color: #555;
+    color: ${(props) => props.theme.color};
 `;
 
 const TodoItem = styled.div`
@@ -103,7 +107,7 @@ const TodoItem = styled.div`
     align-items: center;
     padding: 0.75rem 1rem;
     border-radius: 8px;
-    background-color: #ddd;
+    background-color: ${(props) => props.theme.formBackground};
     box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
     cursor: pointer;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
@@ -111,6 +115,7 @@ const TodoItem = styled.div`
     &:hover {
         transform: translateY(-5px);
         box-shadow: 2px 5px 15px rgba(0, 0, 0, 0.2);
+        background-color: ${(props) => props.theme.navBackground};
     }
 `;
 

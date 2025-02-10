@@ -17,15 +17,39 @@ const ButtonStyle = `
 
 export const ActionBtn = styled.button`
     ${ButtonStyle}
-    background: ${(props) => (props.$variant === 'delete' ? '#e57373' : '#556c75')};
+    background: ${(props) => {
+        if (props.$variant === 'delete') {
+            return props.theme.deleteBtn; 
+        }
+        if (props.$variant === 'update') {
+            return props.theme.updateBtn; 
+        }
+        return props.theme.addBtn;
+    }};
 
     &:hover {
-        background: ${(props) => (props.$variant === 'delete' ? '#d32f2f' : '#7a8b97')};
+        background: ${(props) => {
+            if (props.$variant === 'delete') {
+                return props.theme.navBackground; 
+            }
+            if (props.$variant === 'update') {
+                return props.theme.updateBtnHover; 
+            }
+            return props.theme.addBtnHover; 
+        }};
         transform: scale(1.05);
     }
 
     &:active {
-        background: ${(props) => (props.$variant === 'delete' ? '#c62828' : '#4b5c61')};
+        background: ${(props) => {
+            if (props.$variant === 'delete') {
+                return props.theme.deleteBtnActive; 
+            }
+            if (props.$variant === 'update') {
+                return props.theme.updateBtnActive; 
+            }
+            return props.theme.addBtnActive; 
+        }};
         transform: scale(0.98);
     }
 `;
