@@ -1,11 +1,14 @@
+import { Outlet } from 'react-router-dom';
 import Nav from './Nav';
 import styled from 'styled-components';
 
-const Layout = ({ children }) => {
+const Layout = () => {
     return (
         <LayoutContainer>
             <Nav />
-            <MainContainer>{children}</MainContainer>
+            <MainContainer>
+                <Outlet />
+            </MainContainer>
         </LayoutContainer>
     );
 };
@@ -16,8 +19,8 @@ const LayoutContainer = styled.div`
 `;
 
 const MainContainer = styled.main`
-    margin-top: 100px;
     width: 100%;
+    height: 100%;
     display: flex;
     align-items: center;
     justify-content: center;

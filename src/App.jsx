@@ -4,15 +4,18 @@ import { createGlobalStyle } from 'styled-components';
 import reset from 'styled-reset';
 import store from './redux/config/configStore';
 import ThemeContextProvider from './contexts/themeContext';
+import AuthProvider from './contexts/AuthContext';
 
 const App = () => {
     return (
         <>
             <ThemeContextProvider>
-                <GlobalStyle />
-                <Provider store={store}>
-                    <Routes />
-                </Provider>
+                <AuthProvider>
+                    <GlobalStyle />
+                    <Provider store={store}>
+                        <Routes />
+                    </Provider>
+                </AuthProvider>
             </ThemeContextProvider>
         </>
     );

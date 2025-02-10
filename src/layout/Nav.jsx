@@ -3,28 +3,35 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { Switch } from 'antd';
 import styled from 'styled-components';
 import { useTheme } from '../contexts/themeContext';
+import { useAuth } from '../contexts/AuthContext';
 
 const Nav = () => {
     const navigate = useNavigate();
     const location = useLocation();
+    const {isSignIn, setUser} = useAuth();
     const { isDarkMode, toggleTheme } = useTheme();
 
     const btnText = () => {
-        if (location.pathname === '/') return 'MyTodo';
+        if (location.pathname === '/post') return 'MyTodo';
         if (location.pathname === '/mypage') return 'Home';
         if (location.pathname === '/about') return 'Back';
     };
 
     const handleNav = () => {
-        if (location.pathname === '/') navigate('/mypage');
+        if (location.pathname === '/post') navigate('/mypage');
         if (location.pathname === '/mypage') navigate('/');
         if (location.pathname === '/about') navigate(-1);
     };
+
+    const handleLogin = () => {
+        setUser((prev) => !prev);
+    }
 
     return (
         <HeaderContainer>
             <Logo onClick={() => navigate('/')}>Todo</Logo>
             <HeaderRightContainer>
+                <LoginBtn onClick={handleLogin}>{isSignIn ? '로그아웃' : '로그인'}</LoginBtn>
                 <NavBtn onClick={handleNav}>{btnText()}</NavBtn>
                 <Switch checked={!isDarkMode} onChange={toggleTheme} />
             </HeaderRightContainer>
@@ -56,6 +63,8 @@ const Logo = styled.div`
 const HeaderRightContainer = styled.div`
     display: flex;
     padding: 10px;
+    justify-content: center;
+    align-items: center;
 `;
 
 const NavBtn = styled.button`
@@ -73,5 +82,21 @@ const NavBtn = styled.button`
         opacity: 1;
     }
 `;
+
+const LoginBtn = styled.button`
+    background-color: transparent;
+    border: none;
+    color: ${({ theme }) => theme.color};
+    padding: 0 20px;
+    margin-right: 20px;
+    font-size: 16px;
+    opacity: 0.8;
+    transition: opacity 0.3s;
+    cursor: pointer;
+
+    &:hover {
+        opacity: 1;
+    }
+`
 
 export default Nav;

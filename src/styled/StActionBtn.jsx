@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-const ButtonStyle = `
+export const ButtonStyle = `
     width: 100px;
     height: 40px;
     border: none;

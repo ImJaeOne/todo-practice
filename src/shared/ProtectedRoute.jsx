@@ -1,11 +1,12 @@
 import { Navigate, Outlet, useLocation } from 'react-router-dom';
 import { useState } from 'react';
+import { useAuth } from '../contexts/AuthContext';
 
-const useAuth = () => {
-    const [isSignIn, setSignIn] = useState(true);
+// const useAuth = () => {
+//     const [isSignIn, setSignIn] = useState(false);
 
-    return {isSignIn};
-}
+//     return { isSignIn };
+// };
 
 const ProtectedRoute = () => {
     const { isSignIn } = useAuth();
