@@ -1,5 +1,5 @@
 import { Provider } from 'react-redux';
-import Router from './shared/Router';
+import Routes from './shared/Routes';
 import { createGlobalStyle } from 'styled-components';
 import reset from 'styled-reset';
 import store from './redux/config/configStore';
@@ -11,7 +11,7 @@ const App = () => {
             <ThemeContextProvider>
                 <GlobalStyle />
                 <Provider store={store}>
-                    <Router />
+                    <Routes />
                 </Provider>
             </ThemeContextProvider>
         </>
