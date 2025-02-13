@@ -1,18 +1,11 @@
 import { Navigate, Outlet, useLocation } from 'react-router-dom';
-import { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 
-// const useAuth = () => {
-//     const [isSignIn, setSignIn] = useState(false);
-
-//     return { isSignIn };
-// };
-
 const ProtectedRoute = () => {
-    const { isSignIn } = useAuth();
+    const { user } = useAuth();
     const { pathname } = useLocation();
 
-    if (!isSignIn) {
+    if (!user) {
         // state로 어디서 리다이렉션 해서 왔는지
         return <Navigate to="/sign-in" replace state={{ redirectedFrom: pathname }} />;
     }

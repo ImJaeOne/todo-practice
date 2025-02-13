@@ -1,8 +1,12 @@
 import styled from 'styled-components';
 import { ButtonStyle } from '../styled/StActionBtn';
 import { Link } from 'react-router-dom';
+import { useEffect } from 'react';
+import supabase from '../supabase/client';
 
 const Home = () => {
+    
+
     return (
         <HomeContainer>
             <Title>Let's TODO!</Title>

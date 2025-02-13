@@ -1,102 +1,111 @@
-import React from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { Switch } from 'antd';
-import styled from 'styled-components';
-import { useTheme } from '../contexts/themeContext';
-import { useAuth } from '../contexts/AuthContext';
+import React from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { Switch } from "antd";
+import styled from "styled-components";
+import { useTheme } from "../contexts/themeContext";
+import { useAuth } from "../contexts/AuthContext";
+import supabase from "../supabase/client";
 
 const Nav = () => {
-    const navigate = useNavigate();
-    const location = useLocation();
-    const {isSignIn, setUser} = useAuth();
-    const { isDarkMode, toggleTheme } = useTheme();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { user, setUser } = useAuth();
+  const { isDarkMode, toggleTheme } = useTheme();
 
-    const btnText = () => {
-        if (location.pathname === '/post') return 'MyTodo';
-        if (location.pathname === '/mypage') return 'Home';
-        if (location.pathname === '/about') return 'Back';
-    };
+  const btnText = () => {
+    if (location.pathname === "/post") return "MyTodo";
+    if (location.pathname === "/mypage") return "Home";
+    if (location.pathname === "/about") return "Back";
+  };
 
-    const handleNav = () => {
-        if (location.pathname === '/post') navigate('/mypage');
-        if (location.pathname === '/mypage') navigate('/');
-        if (location.pathname === '/about') navigate(-1);
-    };
+  const handleNav = () => {
+    if (location.pathname === "/post") navigate("/mypage");
+    if (location.pathname === "/mypage") navigate("/");
+    if (location.pathname === "/about") navigate(-1);
+  };
 
-    const handleLogin = () => {
-        setUser((prev) => !prev);
-    }
+  const handleLogin = () => {
+    navigate("/sign-in");
+  };
 
-    return (
-        <HeaderContainer>
-            <Logo onClick={() => navigate('/')}>Todo</Logo>
-            <HeaderRightContainer>
-                <LoginBtn onClick={handleLogin}>{isSignIn ? '로그아웃' : '로그인'}</LoginBtn>
-                <NavBtn onClick={handleNav}>{btnText()}</NavBtn>
-                <Switch checked={!isDarkMode} onChange={toggleTheme} />
-            </HeaderRightContainer>
-        </HeaderContainer>
-    );
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    setUser(false);
+    navigate("/");
+  };
+
+  return (
+    <HeaderContainer>
+      <Logo onClick={() => navigate("/")}>Todo</Logo>
+      <HeaderRightContainer>
+        <LoginBtn onClick={user ? handleLogout : handleLogin}>
+          {user ? "로그아웃" : "로그인"}
+        </LoginBtn>
+        <NavBtn onClick={handleNav}>{btnText()}</NavBtn>
+        <Switch checked={!isDarkMode} onChange={toggleTheme} />
+      </HeaderRightContainer>
+    </HeaderContainer>
+  );
 };
 
 const HeaderContainer = styled.nav`
-    position: fixed;
-    top: 0;
-    width: 100%;
-    height: 80px;
-    background-color: ${({ theme }) => theme.navBackground};
-    color: ${({ theme }) => theme.color};
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: 80px;
+  background-color: ${({ theme }) => theme.navBackground};
+  color: ${({ theme }) => theme.color};
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 `;
 
 const Logo = styled.div`
-    padding: 0 20px;
-    font-size: 24px;
-    font-weight: bold;
-    letter-spacing: 1px;
-    cursor: pointer;
+  padding: 0 20px;
+  font-size: 24px;
+  font-weight: bold;
+  letter-spacing: 1px;
+  cursor: pointer;
 `;
 
 const HeaderRightContainer = styled.div`
-    display: flex;
-    padding: 10px;
-    justify-content: center;
-    align-items: center;
+  display: flex;
+  padding: 10px;
+  justify-content: center;
+  align-items: center;
 `;
 
 const NavBtn = styled.button`
-    background-color: transparent;
-    border: none;
-    color: ${({ theme }) => theme.color};
-    padding: 0 20px;
-    margin-right: 20px;
-    font-size: 16px;
-    opacity: 0.8;
-    transition: opacity 0.3s;
-    cursor: pointer;
+  background-color: transparent;
+  border: none;
+  color: ${({ theme }) => theme.color};
+  padding: 0 20px;
+  margin-right: 20px;
+  font-size: 16px;
+  opacity: 0.8;
+  transition: opacity 0.3s;
+  cursor: pointer;
 
-    &:hover {
-        opacity: 1;
-    }
+  &:hover {
+    opacity: 1;
+  }
 `;
 
 const LoginBtn = styled.button`
-    background-color: transparent;
-    border: none;
-    color: ${({ theme }) => theme.color};
-    padding: 0 20px;
-    margin-right: 20px;
-    font-size: 16px;
-    opacity: 0.8;
-    transition: opacity 0.3s;
-    cursor: pointer;
+  background-color: transparent;
+  border: none;
+  color: ${({ theme }) => theme.color};
+  padding: 0 20px;
+  margin-right: 20px;
+  font-size: 16px;
+  opacity: 0.8;
+  transition: opacity 0.3s;
+  cursor: pointer;
 
-    &:hover {
-        opacity: 1;
-    }
-`
+  &:hover {
+    opacity: 1;
+  }
+`;
 
 export default Nav;
